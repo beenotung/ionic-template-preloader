@@ -1,0 +1,13 @@
+#!/bin/bash
+
+test -z "$name" && read -p "repo name: " name
+test -z "$name" && echo "Error: repo name required." 1>&2 && exit 1
+
+test -z "$username" && read -p "github username: " username
+test -z "$username" && echo "Error: username required." 1>&2 && exit 1
+
+if [ "$password" == "" ]; then
+  curl -u "$username" https://api.github.com/user/repos -d "{\"name\":\"$name\"}"
+else
+  curl -u "$username:$password" https://api.github.com/user/repos -d "{\"name\":\"$name\"}"
+fi

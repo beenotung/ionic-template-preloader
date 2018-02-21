@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+test -z "$username" && read -p "github username: " username
+test -z "$username" && echo "Error: username required." 1>&2 && exit 1
+
+test -z "$password" && read -p "password: " -s password; echo
+test -z "$password" && echo "Error: password required." 1>&2 && exit 1
+
+#ionic start -l | grep 'ionic-angular' | awk '{print $1}' \
+cat list \
+ | xargs -I {} echo username="\"$username\"" password="\"$password\"" seed="\"{}\"" ./run-one | source /dev/stdin

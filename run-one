@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+## setup params
+test -z "$username" && read -p "github username: " username
+test -z "$username" && echo "Error: username required." 1>&2 && exit 1
+
+test -z "$password" && read -p "password: " -s password; echo
+test -z "$password" && echo "Error: password required." 1>&2 && exit 1
+
+test -z "$seed" && read -p "seed: " seed
+test -z "$seed" && echo "Error: seed required." 1>&2 && exit 1
+
+repo="ionic-starter-$seed"
+
+## pre clean up
+if [ -d "$repo" ]; then
+  mv "$repo" "$repo.bk"
+fi
+
+## create project
+echo "---------------------------------"
+echo "ionic start $repo $seed --no-deps"
+echo "---------------------------------"
+ionic start "$repo" "$seed" --no-deps
+cd "$repo"
+git rm -rf package-lock.json
+echo yarn.lock >> .gitignore
+echo package-lock.json >> .gitignore
+git add .gitignore
+cd resources
+git rm -rf android ios
+echo android >> .gitignore
+echo ios >> .gitignore
+echo "*.md5" >> .gitignore
+git add .gitignore
+git commit --amend -m "$(git log | tail -n 1 | sed 's/^    //')"
+
+## create repo
+name="$repo" username="$username" password="$password" ./create-repo-github
+git remote add origin "https://github.com/$username/$repo"
+git push origin

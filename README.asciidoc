@@ -1,0 +1,3 @@
+= ionic-template
+
+A tool to pre-load ionic starter template

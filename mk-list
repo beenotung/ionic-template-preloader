@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+ionic start -l | grep 'ionic-angular' | awk '{print $1}' | tee log
