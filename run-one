@@ -20,10 +20,7 @@ if [ -d "$repo" ]; then
 fi
 
 ## create project
-echo "---------------------------------"
-echo "ionic start $repo $seed --no-deps"
-echo "---------------------------------"
-ionic start "$repo" "$seed" --no-deps
+ionic start "$repo" "$seed" --no-deps --cordova --no-link
 cd "$repo"
 git rm -rf package-lock.json
 echo yarn.lock >> .gitignore
