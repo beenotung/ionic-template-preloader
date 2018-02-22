@@ -2,4 +2,4 @@
 set -e
 set -o pipefail
 
-rm -r *.bk
+rm -rf *.bk
